@@ -3,8 +3,6 @@ package graphics;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static java.lang.Math.floor;
-
 public class ImageProcessor {
     public static BufferedImage processWithWeight(int xSize, int ySize, float[] data) {
         int offset = 20;

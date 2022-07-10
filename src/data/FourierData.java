@@ -23,9 +23,9 @@ public class FourierData {
     //    plotReal = ImageProcessor.process(DEFAULT_X_SIZE,DEFAIULT_Y_SIZE,real);
     //    plotImaginary = ImageProcessor.process(DEFAULT_X_SIZE,DEFAIULT_Y_SIZE,imaginary);
     //}
-    public FourierData(float[] sampleArray){
-        real = FourierProcessor.getInstance().dftReal2(sampleArray);
-        imaginary = FourierProcessor.getInstance().dftImg2(sampleArray);
+    public FourierData(float[] sampleArray, FourierProcessor processor){
+        real = processor.dftReal2(sampleArray);
+        imaginary = processor.dftImg2(sampleArray);
         fillMagnitude();
     }
 
@@ -44,8 +44,9 @@ public class FourierData {
         return imaginary;
     }
 
+    //todo there should be another solution to track the progress in the ui
     public float[] getSamples(){
-        return FourierProcessor.getInstance().iDft(real, imaginary);
+        return (new FourierProcessor()).iDft(real, imaginary);
     }
 
     public float[] getMagnitude() {

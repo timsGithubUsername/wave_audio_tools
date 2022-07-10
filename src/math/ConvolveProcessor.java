@@ -2,12 +2,6 @@ package math;
 
 public class ConvolveProcessor {
 
-    private static ConvolveProcessor convolveProcessor;
-    public static ConvolveProcessor getInstance(){
-        if(convolveProcessor == null) convolveProcessor = new ConvolveProcessor();
-        return convolveProcessor;
-    }
-
     private int progress = -1;
 
     public float[] convolve(float[] samples, float[] weight){

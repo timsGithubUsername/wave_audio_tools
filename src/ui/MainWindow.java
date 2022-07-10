@@ -77,10 +77,11 @@ public class MainWindow {
                 calculateHeavy.compareAndSet(false, true);
                 specButton.setEnabled(false);
                 convolveButton.setEnabled(false);
+                FourierProcessor processor = new FourierProcessor();
 
                 Thread progressBarAsync = new Thread(() -> {
                     while (calculateHeavy.get()){
-                        progressBar1.setValue(FourierProcessor.getInstance().getProgress());
+                        progressBar1.setValue(processor.getProgress());
                         try {
                             Thread.sleep(50);
                         } catch (InterruptedException ex) {
@@ -89,7 +90,7 @@ public class MainWindow {
                     }
                 });
                 Thread calculateFourierAsync = new Thread(() -> {
-                    FourierData fd = ((ComboItem) trackComboBoxModel.getSelectedItem()).getValue().getFourierData();
+                    FourierData fd = ((ComboItem) trackComboBoxModel.getSelectedItem()).getValue().getFourierData(processor);
                     graphicPanel.removeAll();
                     BufferedImage tempImage = scaledImage(graphicPanel.getWidth(), graphicPanel.getHeight(), fd.getPlotMagnitude());
                     graphicPanel.add(new JLabel(new ImageIcon(tempImage)));
@@ -233,10 +234,11 @@ public class MainWindow {
                 calculateHeavy.compareAndSet(false, true);
                 specButton.setEnabled(false);
                 convolveButton.setEnabled(false);
+                ConvolveProcessor processor = new ConvolveProcessor();
 
                 Thread progressBarAsync = new Thread(() -> {
                     while (calculateHeavy.get()){
-                        progressBar1.setValue(ConvolveProcessor.getInstance().getProgress());
+                        progressBar1.setValue(processor.getProgress());
                         try {
                             Thread.sleep(50);
                         } catch (InterruptedException ex) {
@@ -247,7 +249,7 @@ public class MainWindow {
                 Thread convolveAsync = new Thread(() -> {
                     MusicTrack trackOrigin = ((ComboItem) trackComboBoxModel.getSelectedItem()).getValue();
                     MusicTrack track = new MusicTrackImpl1(
-                            ConvolveProcessor.getInstance().convolve(trackOrigin.getSampleArray(),
+                            processor.convolve(trackOrigin.getSampleArray(),
                                     ((ComboItem) convolveComboBoxModel.getSelectedItem()).getValue().getSampleArray()),
                             trackOrigin.getFormat(),
                             trackOrigin.getFormatByteArray(),

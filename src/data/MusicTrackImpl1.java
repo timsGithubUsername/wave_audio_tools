@@ -153,8 +153,8 @@ public class MusicTrackImpl1 implements MusicTrack {
     }
 
     @Override
-    public FourierData getFourierData() {
-        if(fourierData == null) fourierData = new FourierData(geNumberOfSamples(40000));
+    public FourierData getFourierData(FourierProcessor processor) {
+        if(fourierData == null) fourierData = new FourierData(geNumberOfSamples(40000), processor);
         return fourierData;
     }
 

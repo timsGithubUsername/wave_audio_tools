@@ -4,12 +4,6 @@ import static java.lang.Math.*;
 
 public class FourierProcessor {
 
-    private static FourierProcessor fourierProcessor;
-    public static FourierProcessor getInstance(){
-        if(fourierProcessor == null) fourierProcessor = new FourierProcessor();
-        return fourierProcessor;
-    }
-
     private int progress = -1;
 
     public float[] dftReal2(float[] samples){

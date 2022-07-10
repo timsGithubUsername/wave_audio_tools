@@ -12,10 +12,6 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
-        //init fourier processor
-        FourierProcessor.getInstance();
-        //init convolve processor
-        ConvolveProcessor.getInstance();
         //init Ressources
         new Ressources(args);
 

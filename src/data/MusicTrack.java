@@ -1,5 +1,7 @@
 package data;
 
+import math.FourierProcessor;
+
 import javax.sound.sampled.AudioFormat;
 import java.awt.image.BufferedImage;
 
@@ -11,6 +13,6 @@ public interface MusicTrack {
     float[] getSampleArray();
     AudioFormat getFormat();
     BufferedImage getWavePlot();
-    FourierData getFourierData();
+    FourierData getFourierData(FourierProcessor processor);
     float[] geNumberOfSamples(int numberOfSamples);
 }
