@@ -160,11 +160,26 @@ public class MusicTrackImpl1 implements MusicTrack {
 
     @Override
     public float[] geNumberOfSamples(int numberOfSamples) {
+       // float[] output = new float[numberOfSamples];
+//
+       // for (int i = 0; i < numberOfSamples; i++) {
+       //     output[i] = musicSampleArray[i * (musicSampleArray.length / numberOfSamples)];
+       // }
+       // return output;
         float[] output = new float[numberOfSamples];
+        float temp;
+        int segment = musicSampleArray.length / numberOfSamples;
 
-        for (int i = 0; i < numberOfSamples; i++) {
-            output[i] = musicSampleArray[i * (musicSampleArray.length / numberOfSamples)];
+        for (int i = 0; i < numberOfSamples; i++){
+            temp = 0;
+
+            for(int s = i * segment; s < (i+1) * segment; s++){
+                temp += musicSampleArray[s];
+            }
+            System.out.println(musicSampleArray[i * (musicSampleArray.length / numberOfSamples)] + "\t\t" + temp / segment);
+            output[i] = temp / segment;
         }
+
         return output;
     }
 
