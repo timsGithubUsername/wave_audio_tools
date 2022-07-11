@@ -2,7 +2,7 @@ package ui;
 
 import data.FourierData;
 import data.MusicTrack;
-import data.MusicTrackImpl1;
+import data.WaveMusicTrackImpl1;
 import math.ConvolveProcessor;
 import math.FourierProcessor;
 import tools.MusicPlayer;
@@ -248,7 +248,7 @@ public class MainWindow {
                 });
                 Thread convolveAsync = new Thread(() -> {
                     MusicTrack trackOrigin = ((ComboItem) trackComboBoxModel.getSelectedItem()).getValue();
-                    MusicTrack track = new MusicTrackImpl1(
+                    MusicTrack track = new WaveMusicTrackImpl1(
                             processor.convolve(trackOrigin.getSampleArray(),
                                     ((ComboItem) convolveComboBoxModel.getSelectedItem()).getValue().getSampleArray()),
                             trackOrigin.getFormat(),
@@ -297,7 +297,7 @@ public class MainWindow {
                 fileChooser.setMultiSelectionEnabled(false);
 
                 if (status == JFileChooser.APPROVE_OPTION) {
-                    addTrackToTrackComboBox(new MusicTrackImpl1(fileChooser.getSelectedFile()));
+                    addTrackToTrackComboBox(new WaveMusicTrackImpl1(fileChooser.getSelectedFile()));
                 }
             }
         });

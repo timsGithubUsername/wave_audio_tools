@@ -1,7 +1,7 @@
 package tools;
 
 import data.MusicTrack;
-import data.MusicTrackImpl1;
+import data.WaveMusicTrackImpl1;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class Ressources {
         String thisLocation = "./impulse responses/";
 
         try {
-            impulseResponses.add(new MusicTrackImpl1(new File(thisLocation + path)));
+            impulseResponses.add(new WaveMusicTrackImpl1(new File(thisLocation + path)));
         } catch (Exception e){
             e.printStackTrace();
         }

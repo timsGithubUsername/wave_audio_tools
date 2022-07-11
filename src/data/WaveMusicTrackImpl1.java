@@ -13,11 +13,16 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class MusicTrackImpl1 implements MusicTrack {
-    //todo the size of all information before the actual data. that should be calculated!
-    int riffSize = 12;
-    int fmtSize = 24;
-    int dataOffset = 8;
+/**
+ * This class holds and generates all necessary data structures for a music track to manipulate it, load it or save it.
+ */
+public class WaveMusicTrackImpl1 implements MusicTrack {
+    /**
+     * This numbers are always the same for wave files. This class works as only with and for wave files.
+     */
+    private final int RIFF_SIZE = 12;
+    private final int FMT_SIZE = 24;
+    private final int DATA_OFFSET = 8;
 
     private byte[] musicDataByteArray;
     private byte[] formatByteArray;
@@ -32,12 +37,12 @@ public class MusicTrackImpl1 implements MusicTrack {
     private FourierData fourierData;
 
     /**
-     * Create MusicTrack from File
+     * Create MusicTrack from wma-File
      *
      * @param file the File
      * @throws Exception if the file dont exist or the audio format is not supported
      */
-    public MusicTrackImpl1(File file) {
+    public WaveMusicTrackImpl1(File file) {
         try {
             setByteArrayAndFmt(file);
         } catch (UnsupportedAudioFileException e) {
@@ -54,8 +59,9 @@ public class MusicTrackImpl1 implements MusicTrack {
      *
      * @param sampleArray the sample Array
      * @param fmt         the audio format of the underlying file
+     * @param name        the name of the track
      */
-    public MusicTrackImpl1(float[] sampleArray, AudioFormat fmt, byte[] formatByteArray, String name) {
+    public WaveMusicTrackImpl1(float[] sampleArray, AudioFormat fmt, byte[] formatByteArray, String name) {
         musicDataByteArray = converter.getByteArray(sampleArray, fmt);
         this.fmt = fmt;
         this.musicSampleArray = sampleArray;
@@ -65,6 +71,15 @@ public class MusicTrackImpl1 implements MusicTrack {
         setAudioByteArray();
     }
 
+    /**
+     * Reduced constructor to create a musicTrackImpl object only with a sample array and a name
+     * @param sampleArray   the audio format of the underlying file
+     * @param name          the name of the track
+     */
+    public WaveMusicTrackImpl1(float[] sampleArray, String name){
+        this.musicSampleArray = sampleArray;
+        this.name = name;
+    }
     private void setAudioByteArray() {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
@@ -95,9 +110,9 @@ public class MusicTrackImpl1 implements MusicTrack {
     }
 
     private void setFormat() {
-        byte[] formatData = new byte[fmtSize];
+        byte[] formatData = new byte[FMT_SIZE];
 
-        for (int i = riffSize; i < riffSize + fmtSize; i++) formatData[i - riffSize] = musicByteArray[i];
+        for (int i = RIFF_SIZE; i < RIFF_SIZE + FMT_SIZE; i++) formatData[i - RIFF_SIZE] = musicByteArray[i];
 
         formatByteArray = formatData;
     }
@@ -108,10 +123,10 @@ public class MusicTrackImpl1 implements MusicTrack {
      * @return a byte array wich contains only the data
      */
     private void setAudioData() {
-        byte[] audioData = new byte[musicByteArray.length - (riffSize + fmtSize + dataOffset)]; //x-44
+        byte[] audioData = new byte[musicByteArray.length - (RIFF_SIZE + FMT_SIZE + DATA_OFFSET)]; //x-44
 
-        for (int i = riffSize + fmtSize + dataOffset; i < musicByteArray.length; i++)
-            audioData[i - (riffSize + fmtSize + dataOffset)] = musicByteArray[i];
+        for (int i = RIFF_SIZE + FMT_SIZE + DATA_OFFSET; i < musicByteArray.length; i++)
+            audioData[i - (RIFF_SIZE + FMT_SIZE + DATA_OFFSET)] = musicByteArray[i];
         // 44 -> x
         musicDataByteArray = audioData;
     }
@@ -154,18 +169,20 @@ public class MusicTrackImpl1 implements MusicTrack {
 
     @Override
     public FourierData getFourierData(FourierProcessor processor) {
-        if(fourierData == null) fourierData = new FourierData(geNumberOfSamples(40000), processor);
+        if(fourierData == null) fourierData = new FourierData(getNumberOfSamples(40000), processor);
         return fourierData;
     }
 
+    /**
+     * Takes a number of samples and calculates a sample array with the specified number of samples. It divides the
+     * given sample array into this number of segments and calculates the average of these segments.
+     * @param numberOfSamples The number of samples of the new sample array
+     * @return a sample array with the given number of samples
+     */
     @Override
-    public float[] geNumberOfSamples(int numberOfSamples) {
-       // float[] output = new float[numberOfSamples];
-//
-       // for (int i = 0; i < numberOfSamples; i++) {
-       //     output[i] = musicSampleArray[i * (musicSampleArray.length / numberOfSamples)];
-       // }
-       // return output;
+    public float[] getNumberOfSamples(int numberOfSamples) {
+        if(numberOfSamples > musicSampleArray.length) return musicSampleArray;
+
         float[] output = new float[numberOfSamples];
         float temp;
         int segment = musicSampleArray.length / numberOfSamples;
@@ -176,7 +193,7 @@ public class MusicTrackImpl1 implements MusicTrack {
             for(int s = i * segment; s < (i+1) * segment; s++){
                 temp += musicSampleArray[s];
             }
-            System.out.println(musicSampleArray[i * (musicSampleArray.length / numberOfSamples)] + "\t\t" + temp / segment);
+
             output[i] = temp / segment;
         }
 

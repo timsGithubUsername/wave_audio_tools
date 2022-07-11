@@ -1,13 +1,8 @@
-import data.MusicTrack;
-import data.MusicTrackImpl1;
-import math.ConvolveProcessor;
-import math.FourierProcessor;
 import tools.Ressources;
 import ui.MainWindow;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Main {
 

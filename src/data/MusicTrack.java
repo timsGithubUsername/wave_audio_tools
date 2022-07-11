@@ -14,5 +14,5 @@ public interface MusicTrack {
     AudioFormat getFormat();
     BufferedImage getWavePlot();
     FourierData getFourierData(FourierProcessor processor);
-    float[] geNumberOfSamples(int numberOfSamples);
+    float[] getNumberOfSamples(int numberOfSamples);
 }

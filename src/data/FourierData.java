@@ -6,7 +6,6 @@ import math.FourierProcessor;
 import java.awt.image.BufferedImage;
 
 public class FourierData {
-    //todo make accessable
     final int DEFAULT_X_SIZE = 1920;
     final int DEFAULT_Y_SIZE = 1080;
 
@@ -17,18 +16,31 @@ public class FourierData {
     private float[] imaginary;
     private float[] magnitude;
 
-    //public FourierOfTrack(MusicTrack track){
-    //    real = FourierProcessor.dftReal(MAX_FREQUENCY, track.getSampleArray(), DEFAULT_STEP_SIZE);
-    //    imaginary = FourierProcessor.dftImg(MAX_FREQUENCY, track.getSampleArray(), DEFAULT_STEP_SIZE);
-    //    plotReal = ImageProcessor.process(DEFAULT_X_SIZE,DEFAIULT_Y_SIZE,real);
-    //    plotImaginary = ImageProcessor.process(DEFAULT_X_SIZE,DEFAIULT_Y_SIZE,imaginary);
-    //}
+    /**
+     * Create Fourier Data from sample Array. If you pass a FourierProcessor object you are able to track the progress
+     * while the calculation runs. It is expected to do this in a own thread!
+     * @param sampleArray the sample array to create the fourier transformation from
+     * @param processor the processor to track the progress
+     */
     public FourierData(float[] sampleArray, FourierProcessor processor){
         real = processor.dftReal2(sampleArray);
         imaginary = processor.dftImg2(sampleArray);
         fillMagnitude();
     }
 
+    /**
+     * Create Fourier Data from sample Array.
+     * @param sampleArray the sample array to create the fourier transformation from
+     */
+    public FourierData(float[] sampleArray){
+        FourierProcessor processor = new FourierProcessor();
+
+        real = processor.dftReal2(sampleArray);
+        imaginary = processor.dftImg2(sampleArray);
+        fillMagnitude();
+    }
+
+    //Calculate the Magnetude Array from the real and imaginary part
     private void fillMagnitude() {
         magnitude = new float[real.length];
         for(int i = 0; i < magnitude.length; i++){
@@ -53,6 +65,7 @@ public class FourierData {
         return magnitude;
     }
 
+    //the idea behind the plots: they dont get calculated if you dont need them
     public BufferedImage getPlotMagnitude() {
         if(plotMagnitude == null) plotMagnitude = ImageProcessor.process(DEFAULT_X_SIZE, DEFAULT_Y_SIZE,magnitude);
         return plotMagnitude;
